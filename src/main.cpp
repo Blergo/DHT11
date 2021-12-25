@@ -10,7 +10,7 @@ SimpleDHT11 dht11;
 #define TX            1
 #define RS485_EN      2
 #define BAUD_RATE     19200
-#define deviceID      3   
+#define deviceID      247   
 
 enum  {
   TEMP,
