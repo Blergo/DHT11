@@ -15,10 +15,10 @@ byte humidity = 0;
 #define deviceID      1
 
 enum  {
-  TEMP,
-  HUM,
-  ERR,
-  ID,
+  TEMPERATURE,
+  HUMIDITY,
+  ERR_CODE,
+  SET_ID,
   TOTAL_ERRORS,
   TOTAL_REGS_SIZE 
 };
@@ -38,25 +38,25 @@ void loop() {
   switch (chk)
   {
     case DHTLIB_OK:  
-    holdingRegs[3] = 0;
+    holdingRegs[2] = 0;
     break;
     case DHTLIB_ERROR_CHECKSUM: 
-    holdingRegs[3] = 1; 
+    holdingRegs[2] = 1; 
     break;
     case DHTLIB_ERROR_TIMEOUT: 
-    holdingRegs[3] = 2; 
+    holdingRegs[2] = 2; 
     break;
     case DHTLIB_ERROR_CONNECT:
-    holdingRegs[3] = 3;
+    holdingRegs[2] = 3;
     break;
     case DHTLIB_ERROR_ACK_L:
-    holdingRegs[3] = 4;
+    holdingRegs[2] = 4;
     break;
     case DHTLIB_ERROR_ACK_H:
-    holdingRegs[3] = 5;
+    holdingRegs[2] = 5;
     break;
     default: 
-    holdingRegs[3] = 6;
+    holdingRegs[2] = 6;
     break;
   }
 
