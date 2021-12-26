@@ -17,6 +17,8 @@ byte humidity = 0;
 enum  {
   TEMP,
   HUM,
+  ERR,
+  ID,
   TOTAL_ERRORS,
   TOTAL_REGS_SIZE 
 };
@@ -32,10 +34,34 @@ void setup() {
 
 void loop() {
 
-  DHT.read11(DHT11_PIN);
+    int chk = DHT.read11(DHT11_PIN);
+  switch (chk)
+  {
+    case DHTLIB_OK:  
+    holdingRegs[3] = 0;
+    break;
+    case DHTLIB_ERROR_CHECKSUM: 
+    holdingRegs[3] = 1; 
+    break;
+    case DHTLIB_ERROR_TIMEOUT: 
+    holdingRegs[3] = 2; 
+    break;
+    case DHTLIB_ERROR_CONNECT:
+    holdingRegs[3] = 3;
+    break;
+    case DHTLIB_ERROR_ACK_L:
+    holdingRegs[3] = 4;
+    break;
+    case DHTLIB_ERROR_ACK_H:
+    holdingRegs[3] = 5;
+    break;
+    default: 
+    holdingRegs[3] = 6;
+    break;
+  }
 
   holdingRegs[0] = (int)DHT.temperature;
   holdingRegs[1] = (int)DHT.humidity;
   holdingRegs[TOTAL_ERRORS] = modbus_update(holdingRegs);
-  delay(2000);
+  delay(1500);
 }
