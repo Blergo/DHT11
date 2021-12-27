@@ -28,7 +28,7 @@ unsigned int holdingRegs[TOTAL_REGS_SIZE];
 SoftwareSerial mySerial(RX, TX);
 
 void setup() {
-  mySerial.begin(19200);
+  mySerial.begin(BAUD_RATE);
   modbus_configure(&mySerial, BAUD_RATE, deviceID, RS485_EN, TOTAL_REGS_SIZE);
 }
 
