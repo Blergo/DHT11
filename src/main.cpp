@@ -14,6 +14,8 @@ byte humidity = 0;
 #define BAUD_RATE     9600
 #define deviceID      1
 
+unsigned long u32wait = millis() + 500;
+
 enum  {
   TEMPERATURE,
   HUMIDITY,
@@ -35,35 +37,35 @@ void setup() {
 }
 
 void loop() {
-
+  if(millis() > u32wait){
     int chk = DHT.read11(DHT11_PIN);
-  switch (chk)
-  {
-    case DHTLIB_OK:  
-    holdingRegs[3] = 0;
-    break;
-    case DHTLIB_ERROR_CHECKSUM: 
-    holdingRegs[3] = 1; 
-    break;
-    case DHTLIB_ERROR_TIMEOUT: 
-    holdingRegs[3] = 2; 
-    break;
-    case DHTLIB_ERROR_CONNECT:
-    holdingRegs[3] = 3;
-    break;
-    case DHTLIB_ERROR_ACK_L:
-    holdingRegs[3] = 4;
-    break;
-    case DHTLIB_ERROR_ACK_H:
-    holdingRegs[3] = 5;
-    break;
-    default: 
-    holdingRegs[3] = 6;
-    break;
+    switch (chk){
+      case DHTLIB_OK:  
+        holdingRegs[3] = 0;
+      break;
+      case DHTLIB_ERROR_CHECKSUM: 
+        holdingRegs[3] = 1; 
+      break;
+      case DHTLIB_ERROR_TIMEOUT: 
+        holdingRegs[3] = 2; 
+      break;
+      case DHTLIB_ERROR_CONNECT:
+        holdingRegs[3] = 3;
+      break;
+      case DHTLIB_ERROR_ACK_L:
+        holdingRegs[3] = 4;
+      break;
+      case DHTLIB_ERROR_ACK_H:
+        holdingRegs[3] = 5;
+      break;
+      default: 
+        holdingRegs[3] = 6;
+      break;
+    }
+    u32wait = millis() + 500;
   }
-
+  
   holdingRegs[0] = (int)DHT.temperature;
   holdingRegs[1] = (int)DHT.humidity;
   holdingRegs[TOTAL_ERRORS] = modbus_update(holdingRegs);
-  delay(1500);
 }
