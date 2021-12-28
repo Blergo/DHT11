@@ -17,8 +17,9 @@ byte humidity = 0;
 enum  {
   TEMPERATURE,
   HUMIDITY,
-  ERR_CODE,
+  ABILITY,
   SET_ID,
+  ERR_CODE,
   TOTAL_ERRORS,
   TOTAL_REGS_SIZE 
 };
@@ -29,6 +30,7 @@ SoftwareSerial mySerial(RX, TX);
 
 void setup() {
   mySerial.begin(BAUD_RATE);
+  holdingRegs[2] = 60;
   modbus_configure(&mySerial, BAUD_RATE, deviceID, RS485_EN, TOTAL_REGS_SIZE);
 }
 
@@ -38,25 +40,25 @@ void loop() {
   switch (chk)
   {
     case DHTLIB_OK:  
-    holdingRegs[2] = 0;
+    holdingRegs[3] = 0;
     break;
     case DHTLIB_ERROR_CHECKSUM: 
-    holdingRegs[2] = 1; 
+    holdingRegs[3] = 1; 
     break;
     case DHTLIB_ERROR_TIMEOUT: 
-    holdingRegs[2] = 2; 
+    holdingRegs[3] = 2; 
     break;
     case DHTLIB_ERROR_CONNECT:
-    holdingRegs[2] = 3;
+    holdingRegs[3] = 3;
     break;
     case DHTLIB_ERROR_ACK_L:
-    holdingRegs[2] = 4;
+    holdingRegs[3] = 4;
     break;
     case DHTLIB_ERROR_ACK_H:
-    holdingRegs[2] = 5;
+    holdingRegs[3] = 5;
     break;
     default: 
-    holdingRegs[2] = 6;
+    holdingRegs[3] = 6;
     break;
   }
 
