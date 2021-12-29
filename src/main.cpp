@@ -17,12 +17,12 @@ byte humidity = 0;
 unsigned long u32wait = millis() + 500;
 
 enum  {
-  TEMPERATURE,
-  HUMIDITY,
-  ABILITY,
   SET_ID,
+  ABILITY,
   ERR_CODE,
   TOTAL_ERRORS,
+  TEMPERATURE,
+  HUMIDITY,
   TOTAL_REGS_SIZE 
 };
 
@@ -32,7 +32,7 @@ SoftwareSerial mySerial(RX, TX);
 
 void setup() {
   mySerial.begin(BAUD_RATE);
-  holdingRegs[2] = 60;
+  holdingRegs[1] = 05;
   modbus_configure(&mySerial, BAUD_RATE, deviceID, RS485_EN, TOTAL_REGS_SIZE);
 }
 
@@ -41,31 +41,31 @@ void loop() {
     int chk = DHT.read11(DHT11_PIN);
     switch (chk){
       case DHTLIB_OK:  
-        holdingRegs[3] = 0;
+        holdingRegs[2] = 0;
       break;
       case DHTLIB_ERROR_CHECKSUM: 
-        holdingRegs[3] = 1; 
+        holdingRegs[2] = 1; 
       break;
       case DHTLIB_ERROR_TIMEOUT: 
-        holdingRegs[3] = 2; 
+        holdingRegs[2] = 2; 
       break;
       case DHTLIB_ERROR_CONNECT:
-        holdingRegs[3] = 3;
+        holdingRegs[2] = 3;
       break;
       case DHTLIB_ERROR_ACK_L:
-        holdingRegs[3] = 4;
+        holdingRegs[2] = 4;
       break;
       case DHTLIB_ERROR_ACK_H:
-        holdingRegs[3] = 5;
+        holdingRegs[2] = 5;
       break;
       default: 
-        holdingRegs[3] = 6;
+        holdingRegs[2] = 6;
       break;
     }
     u32wait = millis() + 500;
   }
   
-  holdingRegs[0] = (int)DHT.temperature;
-  holdingRegs[1] = (int)DHT.humidity;
-  holdingRegs[TOTAL_ERRORS] = modbus_update(holdingRegs);
+  holdingRegs[4] = (int)DHT.temperature;
+  holdingRegs[5] = (int)DHT.humidity;
+  holdingRegs[3] = modbus_update(holdingRegs);
 }
