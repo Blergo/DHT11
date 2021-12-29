@@ -20,7 +20,7 @@ void exceptionResponse(unsigned char exception);
 unsigned int calculateCRC(unsigned char bufferSize);
 void sendPacket(unsigned char bufferSize);
 
-unsigned int modbus_update(unsigned int *holdingRegs)
+unsigned int modbus_update(uint16_t *holdingRegs)
 {
     unsigned char buffer = 0;
     unsigned char overflow = 0;

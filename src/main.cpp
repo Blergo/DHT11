@@ -16,6 +16,8 @@ byte humidity = 0;
 int deviceID = 1;
 int NewID;
 
+union Pun {float f; uint32_t u;};
+
 unsigned long u32wait = millis() + 500;
 
 enum  {
@@ -23,12 +25,14 @@ enum  {
   ABILITY,
   ERR_CODE,
   TOTAL_ERRORS,
-  TEMPERATURE,
-  HUMIDITY,
+  TEMP0,
+  TEMP1,
+  HUM0,
+  HUM1,
   TOTAL_REGS_SIZE 
 };
 
-unsigned int holdingRegs[TOTAL_REGS_SIZE];
+uint16_t holdingRegs[TOTAL_REGS_SIZE];
 
 SoftwareSerial mySerial(RX, TX);
 
@@ -42,6 +46,15 @@ void setup() {
     delay(100);
   }
   modbus_configure(&mySerial, BAUD_RATE, deviceID, RS485_EN, TOTAL_REGS_SIZE);
+}
+
+void encodeFloat(uint16_t *regs, float x)
+{
+    union Pun pun;
+
+    pun.f = x;
+    regs[0] = (pun.u >> 16) & 0xFFFFU;
+    regs[1] = pun.u & 0xFFFFU;
 }
 
 void reboot(void) {
@@ -83,12 +96,13 @@ void loop() {
   }
 
   if(holdingRegs[0] != 0){
-    EEPROM.put(0, holdingRegs[0]);
+    EEPROM.write(0, holdingRegs[0]);
     delay(100);
     reboot();
   }
-  
-  holdingRegs[4] = (int)DHT.temperature;
-  holdingRegs[5] = (int)DHT.humidity;
+
+  encodeFloat(&holdingRegs[4],  DHT.temperature);
+  encodeFloat(&holdingRegs[6],  DHT.humidity);
+
   holdingRegs[3] = modbus_update(holdingRegs);
 }
