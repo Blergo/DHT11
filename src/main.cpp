@@ -13,8 +13,8 @@ byte humidity = 0;
 #define TX            0
 #define RS485_EN      -1
 #define BAUD_RATE     9600
-int deviceID = 1;
-int NewID;
+unsigned int deviceID = 1;
+unsigned int NewID;
 
 union Pun {float f; uint32_t u;};
 
@@ -45,6 +45,7 @@ void setup() {
     deviceID = NewID;
     delay(100);
   }
+  holdingRegs[0] = deviceID;
   modbus_configure(&mySerial, BAUD_RATE, deviceID, RS485_EN, TOTAL_REGS_SIZE);
 }
 
@@ -95,7 +96,7 @@ void loop() {
     u32wait = millis() + 500;
   }
 
-  if(holdingRegs[0] != 0){
+  if(holdingRegs[0] != 1 && holdingRegs[0] != deviceID){
     EEPROM.write(0, holdingRegs[0]);
     delay(100);
     reboot();
