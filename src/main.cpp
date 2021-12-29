@@ -4,7 +4,7 @@
 #include <dht.h>
 #include <EEPROM.h>
 
-int DHT11_PIN = 2;
+int DHT22_PIN = 2;
 dht DHT;
 byte temperature = 0;
 byte humidity = 0;
@@ -54,7 +54,7 @@ void reboot(void) {
 
 void loop() {
   if(millis() > u32wait){
-    int chk = DHT.read11(DHT11_PIN);
+    int chk = DHT.read22(DHT22_PIN);
     switch (chk){
       case DHTLIB_OK:  
         holdingRegs[2] = 0;
