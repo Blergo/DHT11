@@ -43,7 +43,6 @@ void setup() {
   EEPROM.get(0, NewID);
   if (NewID != 0 && NewID != deviceID){
     deviceID = NewID;
-    delay(100);
   }
   holdingRegs[0] = deviceID;
   modbus_configure(&mySerial, BAUD_RATE, deviceID, RS485_EN, TOTAL_REGS_SIZE);
