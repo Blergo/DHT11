@@ -38,7 +38,7 @@ SoftwareSerial mySerial(RX, TX);
 
 void setup() {
   mySerial.begin(BAUD_RATE);
-  holdingRegs[1] = 05;
+  holdingRegs[1] = 06;
   EEPROM.begin();
   EEPROM.get(0, NewID);
   if (NewID != 0 && NewID != deviceID){
