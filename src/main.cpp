@@ -95,7 +95,7 @@ void loop() {
     u32wait = millis() + 500;
   }
 
-  if(holdingRegs[0] != 1 && holdingRegs[0] != deviceID){
+  if(holdingRegs[0] != deviceID){
     EEPROM.write(0, holdingRegs[0]);
     delay(100);
     reboot();
